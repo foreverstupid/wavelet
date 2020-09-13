@@ -22,12 +22,6 @@ class Vector
     double *data;       /* the elements storage */
 
 public:
-    /* Note: the vector frees the given data itself */
-    Vector(int start, int end, double *data)
-        : start(start), end(end), capacity(end - start + 1), data(data)
-    {
-    }
-
     Vector(int start, int end)
         : start(start), end(end), capacity(end - start + 1)
     {
@@ -45,7 +39,7 @@ public:
 
     ~Vector()
     {
-        if (data)
+        if (data != NULL)
         {
             free(data);
         }
@@ -89,6 +83,11 @@ public:
     Vector convolve(const Vector &vector) const;
 
 private:
+    Vector(int start, int end, double *data)
+        : start(start), end(end), capacity(end - start + 1), data(data)
+    {
+    }
+
     static void copy(double *dst, double *src, int cnt);
     static int min(int a, int b) { return a < b ? a : b; };
     static int max(int a, int b) { return a > b ? a : b; };

@@ -2,7 +2,6 @@
 #define WAVE_VECTOR_CLASSS_HPP
 
 #include <cstdlib>
-#include <cmath>
 
 /*
  * Represents an infinite vector with a finite number
@@ -79,10 +78,13 @@ public:
 
     /* returns the count of elements between the first
        and the last non-zero ones inclusive */
-    int nonZeroCount() const
+    int getNonZeroCount() const
     {
         return this->end - this->start + 1;
     }
+
+    int getStart() const { return this->start; };
+    int getEnd() const { return this->end; };
 
     /* performs convolution with another vector */
     Vector convolve(const Vector &vector) const;

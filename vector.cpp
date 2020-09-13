@@ -9,7 +9,7 @@ void Vector::operator=(const Vector &vector)
         return;
     }
 
-    int count = vector.nonZeroCount();
+    int count = vector.getNonZeroCount();
     if (this->capacity < count)
     {
         this->capacity = count;
@@ -25,7 +25,7 @@ void Vector::operator+=(const Vector &vector)
 {
     this->start = min(this->start, vector.start);
     this->end = max(this->end, vector.end);
-    int newCount = this->nonZeroCount();
+    int newCount = this->getNonZeroCount();
 
     if (newCount > this->capacity)
     {
@@ -44,7 +44,7 @@ void Vector::operator-=(const Vector &vector)
 {
     this->start = min(this->start, vector.start);
     this->end = max(this->end, vector.end);
-    int newCount = this->nonZeroCount();
+    int newCount = this->getNonZeroCount();
 
     if (newCount > this->capacity)
     {
@@ -102,7 +102,7 @@ Vector Vector::operator-(const Vector &vector) const
 
 Vector Vector::operator*(double f) const
 {
-    int newCapacity = this->nonZeroCount();
+    int newCapacity = this->getNonZeroCount();
     double *newData = (double *)malloc(newCapacity * sizeof(double));
 
     #pragma omp parallel for
@@ -112,6 +112,24 @@ Vector Vector::operator*(double f) const
     }
 
     return Vector(this->start, this->end, newData);
+}
+
+Vector Vector::convolve(const Vector &vector) const
+{
+    int newStart = this->start + vector.start;
+    int newEnd = this->end + vector.end;
+    Vector result(newStart, newEnd);
+
+    for (int i = newStart; i <= newEnd; i++)
+    {
+        result[i] = 0.0;
+        for (int j = vector.start; j <= vector.end; j++)
+        {
+            result[i] += vector[j] * (*this)[i - j];
+        }
+    }
+
+    return result;
 }
 
 void Vector::copy(double *dst, double *src, int cnt)

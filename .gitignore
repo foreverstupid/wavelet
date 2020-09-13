@@ -1,0 +1,5 @@
+*.o
+wave
+*.txt
+*.csv
+*.json

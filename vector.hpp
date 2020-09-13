@@ -52,6 +52,11 @@ public:
     Vector operator+(const Vector &vector) const;
     Vector operator-(const Vector &vector) const;
     Vector operator*(double f) const;
+    friend Vector operator*(double f, const Vector &vector)
+    {
+        return vector * f;
+    };
+
     double operator[](int idx) const
     {
         if (idx < start || idx > end)

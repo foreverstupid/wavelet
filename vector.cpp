@@ -120,6 +120,7 @@ Vector Vector::convolve(const Vector &vector) const
     int newEnd = this->end + vector.end;
     Vector result(newStart, newEnd);
 
+    #pragma omp parallel for
     for (int i = newStart; i <= newEnd; i++)
     {
         result[i] = 0.0;

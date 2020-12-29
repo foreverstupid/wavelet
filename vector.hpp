@@ -1,5 +1,5 @@
 #ifndef WAVE_VECTOR_CLASS_HPP
-#define WAVE_VECTOR_CLASSS_HPP
+#define WAVE_VECTOR_CLASS_HPP
 
 #include <cstdlib>
 

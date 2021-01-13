@@ -36,6 +36,11 @@ public:
         copy(data, vector.data, capacity);
     }
 
+    Vector(int start, int end, double *data)
+        : start(start), end(end), capacity(end - start + 1), data(data)
+    {
+    }
+
     ~Vector()
     {
         if (data != NULL)
@@ -89,12 +94,10 @@ public:
     /* performs convolution with another vector */
     Vector convolve(const Vector &vector) const;
 
-private:
-    Vector(int start, int end, double *data)
-        : start(start), end(end), capacity(end - start + 1), data(data)
-    {
-    }
+    /* returns reversed version of the vector */
+    Vector reverse() const;
 
+private:
     static void copy(double *dst, double *src, int cnt);
     static int min(int a, int b) { return a < b ? a : b; };
     static int max(int a, int b) { return a > b ? a : b; };

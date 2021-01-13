@@ -126,6 +126,17 @@ Vector Vector::convolve(const Vector &vector) const
     return result;
 }
 
+Vector Vector::reverse() const
+{
+    Vector result(-this->end, -this->start);
+    for (int i = end; i >= start; i--)
+    {
+        result[-i] = (*this)[i];
+    }
+
+    return result;
+}
+
 void Vector::copy(double *dst, double *src, int cnt)
 {
     for (int i = 0; i < cnt; i++)

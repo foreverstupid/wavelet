@@ -3,3 +3,5 @@ wave
 *.txt
 *.csv
 *.json
+*.ssv
+*.png

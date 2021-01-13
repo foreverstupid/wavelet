@@ -7,49 +7,61 @@
 #include "downscale_filter.hpp"
 #include "composed_filter.hpp"
 
-Filter *getFilter()
-{
-    Filter **innerFilters = new Filter*[2];
-    innerFilters[1] = new UpscaleFilter();
-    innerFilters[0] = new DownscaleFilter();
 
-    return new ComposedFilter(innerFilters, 2);
+
+Vector performWavelet(const Vector &input)
+{
+    double sq = 1.0 / sqrt(2);
+    Vector h(-1, 0, new double[2]{ -sq, sq });
+    Vector g(-1, 0, new double[2]{  sq, sq });
+
+    ConvolveFilter H1(h);
+    ConvolveFilter H2(h.reverse());
+
+    ConvolveFilter G1(g);
+    ConvolveFilter G2(g.reverse());
+
+    UpscaleFilter up;
+    DownscaleFilter down;
+
+    Vector a = down.perform(H1.perform(input));
+    Vector b = down.perform(G1.perform(input));
+
+    a = H2.perform(up.perform(a));
+    b = G2.perform(up.perform(b));
+
+    return a + b;
 }
 
 
 
-void printVector(const Vector &y)
+void saveVector(const Vector &v, const char *fileName)
 {
-    printf("{ ");
-    for (int i = y.getStart(); i <= y.getEnd(); i++)
+    FILE *file = fopen(fileName, "w");
+    for (int i = v.getStart(); i <= v.getEnd(); i++)
     {
-        printf("%15.5e[%2.1d]", y[i], i);
+        fprintf(file, "%d %lf\n", i, v[i]);
     }
 
-    putchar('}');
+    fclose(file);
 }
 
 
 
 int main()
 {
-    int len = 3;
-    Vector h(-len, len);
+    int start = -1000;
+    int end = 1000;
+    Vector x(start, end);
 
-    for (int i = -len; i <= len; i++)
+    for (int i = start; i <= end; i++)
     {
-        h[i] = sin(i * 0.01);
+        x[i] = sin(i * 0.01) + sin(i * 0.1);
     }
 
-    Filter *filter = getFilter();
-    Vector y = filter->perform(h);
-
-    printf("Signal: { sin(0.01 * i), i=%d,%d }\n", -len, len);
-    printf("Input:  ");
-    printVector(h);
-    printf("\nOutput: ");
-    printVector(y);
-    putchar('\n');
+    Vector y = performWavelet(x);
+    saveVector(x, "input.ssv");
+    saveVector(y, "output.ssv");
 
     return 0;
 }

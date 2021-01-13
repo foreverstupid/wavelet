@@ -9,15 +9,14 @@
  */
 class ConvolveFilter : public Filter
 {
-    Vector *kernel; /* the vector the filter is used for convolution */
+    Vector kernel; /* the vector the filter is used for convolution */
 
 public:
-    ConvolveFilter(Vector *kernel) : kernel(kernel) {}
-    ~ConvolveFilter(){ if (kernel){ delete kernel; } }
+    ConvolveFilter(Vector kernel) : kernel(kernel) {}
 
     Vector perform(const Vector &input) const
     {
-        return input.convolve(*kernel);
+        return input.convolve(kernel);
     }
 
 private:

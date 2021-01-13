@@ -2,6 +2,7 @@
 #define WAVE_VECTOR_CLASS_HPP
 
 #include <cstdlib>
+#include <cmath>
 
 /*
  * Represents an infinite vector with a finite number
@@ -96,6 +97,9 @@ public:
 
     /* returns reversed version of the vector */
     Vector reverse() const;
+
+    /* drops forward and backward zeros */
+    void trim();
 
 private:
     static void copy(double *dst, double *src, int cnt);

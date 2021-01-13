@@ -144,3 +144,30 @@ void Vector::copy(double *dst, double *src, int cnt)
         dst[i] = src[i];
     }
 }
+
+void Vector::trim()
+{
+    int shift = 0;
+    while (start + shift < end && fabs((*this)[start + shift]) < eps)
+    {
+        shift++;
+    }
+
+    int newEnd = end;
+    while (newEnd > start && fabs((*this)[newEnd]) < eps)
+    {
+        newEnd--;
+    }
+
+    if (shift > 0 || end != newEnd)
+    {
+        start += shift;
+        end = newEnd;
+        capacity = end - start + 1;
+
+        if (shift > 0)
+        {
+            copy(data, data + shift, capacity);
+        }
+    }
+}

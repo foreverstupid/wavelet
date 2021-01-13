@@ -10,6 +10,7 @@
 class Filter
 {
 public:
+    virtual ~Filter(){}
     virtual Vector perform(const Vector &input) const = 0;
 };
 

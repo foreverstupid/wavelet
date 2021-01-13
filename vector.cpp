@@ -33,7 +33,6 @@ void Vector::operator+=(const Vector &vector)
         this->data = (double *)realloc(this->data, newCount * sizeof(double));
     }
 
-    #pragma omp parallel for
     for (int i = this->start; i <= this->end; i++)
     {
         this->data[i - this->start] += vector[i];
@@ -52,7 +51,6 @@ void Vector::operator-=(const Vector &vector)
         this->data = (double *)realloc(this->data, newCount * sizeof(double));
     }
 
-    #pragma omp parallel for
     for (int i = this->start; i <= this->end; i++)
     {
         this->data[i - this->start] -= vector[i];
@@ -61,7 +59,6 @@ void Vector::operator-=(const Vector &vector)
 
 void Vector::operator*=(double f)
 {
-    #pragma omp parallel for
     for (int i = this->start; i <= this->end; i++)
     {
         this->data[i - this->start] *= f;
@@ -75,7 +72,6 @@ Vector Vector::operator+(const Vector &vector) const
     int newCapacity = newEnd -newStart + 1;
     double *newData = (double *)malloc(newCapacity * sizeof(double));
 
-    #pragma omp parallel for
     for (int i = newStart; i <= newEnd; i++)
     {
         newData[i - newStart] = (*this)[i] + vector[i];
@@ -91,7 +87,6 @@ Vector Vector::operator-(const Vector &vector) const
     int newCapacity = newEnd - newStart + 1;
     double *newData = (double *)malloc(newCapacity * sizeof(double));
 
-    #pragma omp parallel for
     for (int i = newStart; i <= newEnd; i++)
     {
         newData[i - newStart] = (*this)[i] - vector[i];
@@ -105,7 +100,6 @@ Vector Vector::operator*(double f) const
     int newCapacity = this->getNonZeroCount();
     double *newData = (double *)malloc(newCapacity * sizeof(double));
 
-    #pragma omp parallel for
     for (int i = this->start; i <= this->end; i++)
     {
         newData[i - this->start] = (*this)[i] * f;
@@ -120,7 +114,6 @@ Vector Vector::convolve(const Vector &vector) const
     int newEnd = this->end + vector.end;
     Vector result(newStart, newEnd);
 
-    #pragma omp parallel for
     for (int i = newStart; i <= newEnd; i++)
     {
         result[i] = 0.0;
@@ -135,7 +128,6 @@ Vector Vector::convolve(const Vector &vector) const
 
 void Vector::copy(double *dst, double *src, int cnt)
 {
-    #pragma omp parallel for
     for (int i = 0; i < cnt; i++)
     {
         dst[i] = src[i];

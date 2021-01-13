@@ -12,17 +12,8 @@ class ConvolveFilter : public Filter
     Vector *kernel; /* the vector the filter is used for convolution */
 
 public:
-    ConvolveFilter(Vector *kernel) : kernel(kernel)
-    {
-    }
-
-    ~ConvolveFilter()
-    {
-        if (kernel)
-        {
-            delete kernel;
-        }
-    }
+    ConvolveFilter(Vector *kernel) : kernel(kernel) {}
+    ~ConvolveFilter(){ if (kernel){ delete kernel; } }
 
     Vector perform(const Vector &input) const
     {

@@ -1,9 +1,9 @@
 CC=g++
-CFLAGS=-Wall -O3 -Ofast -fno-exceptions -fopenmp
+CFLAGS=-Wall -O2 -fno-exceptions
 LIBS=-lm
-LDFLAGS=-lpthread -fopenmp
+LDFLAGS=
 
-SRC=vector.cpp
+SRC=vector.cpp upscale_filter.cpp downscale_filter.cpp composed_filter.cpp
 OBJ=$(SRC:%.cpp=%.o)
 NAME=wave
 

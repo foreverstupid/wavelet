@@ -3,28 +3,37 @@
 
 #include "vector.hpp"
 #include "convolve_filter.hpp"
+#include "upscale_filter.hpp"
+#include "downscale_filter.hpp"
+#include "composed_filter.hpp"
 
-ConvolveFilter *getFilter()
+Filter *getFilter()
 {
-    Vector *vector = new Vector(0, 0);
-    (*vector)[0] = 1.0;
-    return new ConvolveFilter(vector);
+    Filter **innerFilters = new Filter*[2];
+    innerFilters[1] = new UpscaleFilter();
+    innerFilters[0] = new DownscaleFilter();
+
+    return new ComposedFilter(innerFilters, 2);
 }
+
+
 
 void printVector(const Vector &y)
 {
-    printf("[ ");
+    printf("{ ");
     for (int i = y.getStart(); i <= y.getEnd(); i++)
     {
-        printf("%lf ", y[i]);
+        printf("%15.5e[%2.1d]", y[i], i);
     }
 
-    putchar(']');
+    putchar('}');
 }
+
+
 
 int main()
 {
-    int len = 10;
+    int len = 3;
     Vector h(-len, len);
 
     for (int i = -len; i <= len; i++)
@@ -35,7 +44,7 @@ int main()
     Filter *filter = getFilter();
     Vector y = filter->perform(h);
 
-    printf("Convolution of { sin(0.01 * i), i=-10,10 } with delta:\n");
+    printf("Signal: { sin(0.01 * i), i=%d,%d }\n", -len, len);
     printf("Input:  ");
     printVector(h);
     printf("\nOutput: ");
